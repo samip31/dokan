@@ -10,7 +10,7 @@ export default function useFetchCart() {
   const queryClient = new QueryClient();
 
   const getCart = async () => {
-    const response = await axios.request<CartItem[]>(config); // Specify the response data type as Product[]
+    const response = await axios.request<CartItem[]>(config); 
     return response.data;
   };
 

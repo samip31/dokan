@@ -9,7 +9,7 @@ export default function useFetchTrendingProducts() {
   };
 
   const getTrendingProducts = async () => {
-    const response = await axios.request<Product[]>(config); // Specify the response data type as Product[]
+    const response = await axios.request<Product[]>(config); 
     return response.data;
   };
 

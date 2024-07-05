@@ -21,7 +21,7 @@ export default function ProductDetail() {
   };
 
   const handleGoBack = () => {
-    history.back(); // Navigate back to the previous page
+    history.back(); 
   };
 
   return (
