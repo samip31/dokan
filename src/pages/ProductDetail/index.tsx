@@ -1,8 +1,9 @@
 import { DokanLogo } from "@src/assets/svg";
 import useCart from "@src/hooks/useCart";
 import useFetchProductDetail from "@src/hooks/useFetchProductDetail";
-import React from "react";
 import { Link, useParams } from "react-router-dom";
+import Notification from "@src/components/Notification";
+import { useState } from "react";
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -10,22 +11,28 @@ export default function ProductDetail() {
     productId ? productId.toString() : ""
   );
 
+  const { addToCart } = useCart();
+
+  const [showNotification, setShowNotification] = useState(false);
+
+  const handleAddToCart = async () => {
+    if (productData && productData._id) {
+      await addToCart({ productId: productData._id, quantity: 1 });
+      setShowNotification(true); // Show notification
+      setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
+    }
+  };
+
+  const handleGoBack = () => {
+    history.back();
+  };
+
   if (!productData) {
     return <div>Loading...</div>;
   }
 
-  const { addToCart } = useCart();
-
-  const handleAddToCart = () => {
-    addToCart(productData._id, 1);
-  };
-
-  const handleGoBack = () => {
-    history.back(); 
-  };
-
   return (
-    <div className="bg-hero-pattern bg-center bg-fixed p-20">
+    <div className="bg-hero-pattern bg-center bg-fixed px-20 py-10">
       <div className="flex flex-row justify-between">
         <button
           className="font-syne text-3xl font-semibold leading-42 text-left"
@@ -60,12 +67,18 @@ export default function ProductDetail() {
             </div>
           </div>
           <div className="py-10">
-            <button className="primaryButton " onClick={handleAddToCart}>
+            <button className="primaryButton" onClick={handleAddToCart}>
               Add to Cart
             </button>
           </div>
         </div>
       </div>
+
+      {showNotification && (
+        <div className="fixed bottom-4 right-4">
+          <Notification message={`${productData.name} added to cart!`} />
+        </div>
+      )}
     </div>
   );
 }
